@@ -1,38 +1,64 @@
-Twig-Filters-Plugin
-===================
+# Twig Functions
 
-An example plugin for [Phile](https://github.com/PhileCMS/Phile) showing how to make [Twig filters](http://twig.sensiolabs.org/doc/advanced.html#filters).
+[![Build Status](https://travis-ci.org/PhileCMS/phileTwigFilters.svg?branch=master)](https://travis-ci.org/PhileCMS/phileTwigFilters)
 
-### 1.1 Installation (composer)
-```
-php composer.phar require phile/twig-filters:*
-```
-### 1.2 Installation (Download)
+Adds helpfull Twig functions to [Phile](https://github.com/PhileCMS/Phile) and easily allows you to create new ones. [Project home](https://github.com/PhileCMS/phileTwigFilters).
 
-* Install [Phile](https://github.com/PhileCMS/Phile)
-* Clone this repo into `plugins/phile/twigFilters`
+## Installation
 
-### 2. Activation
-
-After you have installed the plugin. You need to add the following line to your `config.php` file:
-
-```
-$config['plugins']['phile\\twigFilters'] = array('active' => true);
+```bash
+composer require phile/twig-functions
 ```
 
-### Usage
+## Activation
 
-There will now be a new twig filter called `excerpt`. It grabs the first paragraph of the content string.
-
-So you can use it like {{ content|excerpt }} and it will print the first paragraph from that pages markdown file.
-
-There will also be a filter called `limit_words`. It is used in the same way, and the limit is controlled in the [plugins config file](https://github.com/PhileCMS/Twig-Filters-Plugin/blob/master/config.php#L3).
-
-If you want to remove the HTML markup when using the `limit_words` filter, you can use the `striptags` Twig filter:
+```php
+$config['plugins']['phile\\twigFunctions'] = [
+    'active' => true
+];
 ```
+
+## Usage
+
+This plugin includes some predefined Twig-filter and allows you to easily add your own.
+
+### Define a New Custom Filter
+
+See the existing filters in config.php for how to add your own filter.
+
+### excerpt
+
+Grabs the first paragraph of the content string.
+
+```twig
+{{ content|excerpt }}
+```
+
+### limit_words
+
+Similar to `excert` but limits on number of words. Use Twig's `striptags` to remove HTML-tags.
+
+```twig
 {{ page.content|striptags|limit_words }}
 ```
 
-### Adding More Filters
+### shuffle
 
-See the [Twig Documentation on creating filters](http://twig.sensiolabs.org/doc/advanced.html#filters).
+Shuffles an array. For example show a shuffled lists of pages:
+
+```twig
+<ul class="posts">
+  {% for page in pages|shuffle %}
+    <li><a href="{{ page.url }}">{{ page.title }}</a></li>
+  {% endfor %}
+</ul>
+```
+
+### slugify
+
+This new Twig filter allows you to slugify a string. This is useful for making safe URLs, HTML-safe class/id names, or just cleaning up general strings.
+
+```twig
+<!-- becomes "this–is–an–strange–string" -->
+{{ "This Is ____an STRÄNGE      string" | slugify }}
+```

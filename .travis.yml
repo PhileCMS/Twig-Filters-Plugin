@@ -1,0 +1,16 @@
+language: php
+php:
+    - '7.1'
+    - '7.2'
+notifications:
+    email:
+        on_success: never
+        on_failure: always
+install:
+    # prefer source for required phpunit.xml
+    - composer install --prefer-source
+    - touch vendor/phile-cms/phile/lib/vendor/autoload.php
+    - mkdir -p vendor/phile-cms/phile/plugins/phile/twigFilters
+    - find . -maxdepth 1 ! -path ./vendor ! -path . -exec mv \{\} vendor/phile-cms/phile/plugins/phile/twigFilters \;
+script:
+    - vendor/bin/phpunit -c vendor/phile-cms/phile/phpunit.xml  vendor/phile-cms/phile/plugins/phile/twigFilters/
